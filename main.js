@@ -1,6 +1,19 @@
-let serverURL = "http://localhost:3000/notes"
+const serverURL = "http://localhost:3000/notes"
+const PREVIEW_LENGTH = 90;
 let notes = []
 
+refreshLocalDB()
+
+function populateThumbs() {  
+    let thumbTemplate = document.getElementById("thumbnail-template").innerHTML
+    let thumbGenerator = _.template(thumbTemplate)
+    let thumbTarget = document.querySelector("#selector-container")
+    
+    for (let note of notes) {
+        let thumbHTML = thumbGenerator(note.thisThumbNote())
+        thumbTarget.innerHTML += thumbHTML
+    }
+}
 
 
 
@@ -15,10 +28,17 @@ let notes = []
 
 
 
+
+
+
+//Below are functions for handling the local database
 function refreshLocalDB() {
     fetch(serverURL)
         .then(res => res.json())
-        .then(data => addToLocal(data))
+        .then( function(data) {
+            addToLocal(data)
+            populateThumbs()
+        })
 }
 
 function addToLocal(arrOfNotes) {
@@ -31,6 +51,8 @@ function addToLocal(arrOfNotes) {
 }
 
 
+
+//Below is the Note object and functions used for finding Notes and converting server feedback into Notes.
 function Note(title = "", body = "", tags = [], created = new Date(), modified = new Date(), id = null) {
     this.id = id
     this.title = title
@@ -38,13 +60,15 @@ function Note(title = "", body = "", tags = [], created = new Date(), modified =
     this.modified = modified
     this.created = created
     this.tags = tags
+    this.bodyShort = getShortBody(this.body)
 
     this.getID = () => this.id
     this.getDateCreated = () => moment(created).format("MM-DD-YYYY")
     this.getDateModified = () => moment(modified).format("MM-DD-YYYY")
     this.getBody = () => this.body
     this.getTitle = () => this.title
-    this.thisNote = function() {return { "title" : this.title, "body" : this.body, "tags" : this.tags, "modified" : this.modified, "created" : this.created }}
+    this.thisNote = function() {return { "title" : this.title, "body" : this.body, "tags" : this.tags, "modified" : this.modified, "created" : this.created, "id" : this.id, "bodyShort" : this.bodyShort}}
+    this.thisThumbNote = function() {return { "title" : this.title, "body" : this.body, "tags" : this.tags, "modified" : moment(modified).format("MM-DD-YYYY"), "created" : moment(created).format("MM-DD-YYYY"), "id" : this.id, "bodyShort" : this.bodyShort}}
 
     this.addToDB = function() {
         fetch(serverURL, {
@@ -69,6 +93,14 @@ function Note(title = "", body = "", tags = [], created = new Date(), modified =
             body: JSON.stringify(this.thisNote())
         })
         refreshLocalDB()
+    }
+
+    function getShortBody(str) {
+        if (str.length <= PREVIEW_LENGTH) {
+            return str
+        } else {
+            return str.slice(0,PREVIEW_LENGTH).trim() + "..."
+        }
     }
 }
 
