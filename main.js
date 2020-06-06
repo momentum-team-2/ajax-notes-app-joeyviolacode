@@ -1,19 +1,15 @@
+//TODO:  Complete display...hook up all wires to add/remove from DB on buttons, select. 
+//NEXT:  Add search bar.
+//FUTURE: Add tags?  Colors?
+
+
 const serverURL = "http://localhost:3000/notes"
 const PREVIEW_LENGTH = 90;
 let notes = []
 
 refreshLocalDB()
 
-function populateThumbs() {  
-    let thumbTemplate = document.getElementById("thumbnail-template").innerHTML
-    let thumbGenerator = _.template(thumbTemplate)
-    let thumbTarget = document.querySelector("#selector-container")
-    
-    for (let note of notes) {
-        let thumbHTML = thumbGenerator(note.thisThumbNote())
-        thumbTarget.innerHTML += thumbHTML
-    }
-}
+
 
 
 
@@ -36,9 +32,20 @@ function refreshLocalDB() {
     fetch(serverURL)
         .then(res => res.json())
         .then( function(data) {
-            addToLocal(data)
+            addToLocal(data.reverse())
             populateThumbs()
         })
+}
+
+function populateThumbs() {  
+    let thumbTemplate = document.getElementById("thumbnail-template").innerHTML
+    let thumbGenerator = _.template(thumbTemplate)
+    let thumbTarget = document.querySelector("#selector-container")
+    
+    for (let note of notes) {
+        let thumbHTML = thumbGenerator(note.thisThumbNote())
+        thumbTarget.innerHTML += thumbHTML
+    }
 }
 
 function addToLocal(arrOfNotes) {
