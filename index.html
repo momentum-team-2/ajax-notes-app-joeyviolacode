@@ -17,12 +17,38 @@
   </header>
   <div id="body-container">
     <div id="selector-container">
+      <div id="search-bar">
+        <div class="search-input">
+          <label for="search-input">Search:</label>
+          <input type="text" id="search-input">
+        </div>   
+      </div>
+      <div id="selector-display">
 
-
+      </div>
     </div>
     <div id="editor-container">
-
-
+      <div id="display-container">
+        <div class="display">
+          <div class="title-editor">
+            <label for="title-display">Title:</label>
+            <input type="text" id="title-input">
+          </div>        
+          <div class="body-editor">
+            <label for="editor-display">Note:</label>
+            <textarea type="text" id="body-input"></textarea>
+          </div>        
+          <div class="tags-editor">
+            <label for="tags-display">Tags:</label>
+            <input type="text" id="tags-input">
+          </div>
+        </div> 
+      </div>
+      <div id="controls">
+        <button id="new-button">New Note</button>
+        <button id="save-button">Save Note</button>
+        <button id="delete-button">Delete Note</button>
+      </div>
     </div>
   </div>
 </body>
