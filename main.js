@@ -1,6 +1,7 @@
-//NEXT:  Add search bar.
-//FUTURE: Add tags?  Colors?
-//noncritical error on tags.join in select note function---tags aren't staying an array
+//FUTURE:   Add ability to pin note to top of notes list.   
+//          Add selectable background-colors for notes
+//          Make search more robust so it doesn't only search contiguous strings but looks to match words
+//          Do more CSS to make things look a little less flat...change background color and give some depth to elements/buttons
 
 
 const serverURL = "http://localhost:3000/notes"
@@ -33,6 +34,7 @@ function clearNote() {
         document.getElementById("title-input").value = ""
         document.getElementById("body-input").value = ""
         document.getElementById("tags-input").value = ""
+        document.getElementById("search-input").value = ""
 }
 
 function initializeDelete() {
@@ -65,6 +67,7 @@ function  saveNote() {
         let note = new Note(title, body, tags)
         note.addToDB()
         refreshLocalDBCurr()
+        document.getElementById("search-input").value = ""
     } else {
         let note = getNoteByID(Number(currentID))
         note.title = title
@@ -110,9 +113,9 @@ function refreshLocalDBCurr() {
         .then(res => res.json())
         .then( function(data) {
             let arr = data
+            currentID = arr[arr.length - 1].id
             addToLocal(arr)
             populateThumbs(notes)
-            currentID = arr[0].id
         })
 }
 
@@ -143,7 +146,6 @@ function addToLocal(arrOfNotes) {
     notes = mostRecentFirst(notes)
 }
 
-//****************  This one needs help! */
 function mostRecentFirst(arrayOfNotes) {
     let recentArray = [...arrayOfNotes].sort( (a, b) => new Date(b.modified) - new Date(a.modified))
     return recentArray
@@ -221,11 +223,6 @@ function getNoteByID(id) {
     }
     return null
 }
-
-/*function noteFromJSON(obj) {
-    let values = JSON.parse(obj)
-    return new Note(values.title, values.body, values.tags, values.modified, values.created, values.id)
-}*/
 
 function noteFromRes(values) {
     return new Note(values.title, values.body, values.tags, values.modified, values.created, values.id)

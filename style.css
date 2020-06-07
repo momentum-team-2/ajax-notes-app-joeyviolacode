@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: rgb(43, 39, 39);
+    background-color: white; /* rgb(43, 39, 39);*/
     color: white;
     height: 100vh;
     width: 100vw;
@@ -47,6 +47,10 @@ header {
     border-radius: 10px;
     margin: 10px 5px;
     padding: 10px;
+    border: 1px solid black;
+    box-shadow: 3px 5px 5px grey;
+    background-color: rgb(245, 240, 255)
+
 }
 
 #selector-display {
@@ -62,6 +66,13 @@ header {
     border-radius: 10px;
     margin: 10px 5px;
     padding: 10px;
+    border: 1px solid black;
+    box-shadow: 3px 5px 5px grey;
+}
+
+.thumbnail:active {
+    background-color: rgb(179, 190, 136);
+    box-shadow: none;
 }
 
 .info-bar {
@@ -99,6 +110,8 @@ header {
     margin: auto;
     border-radius: 10px;
     padding: 10px;
+    border: 1px solid black;
+    box-shadow: 3px 5px 5px grey;
 }
 
 #controls {
@@ -156,10 +169,14 @@ button {
     margin: 0 20px;
     font-family: 'Merriweather', serif;
     font-size: 20px;
-    background-color: rgb(245, 240, 255)
+    background-color: rgb(183, 174, 199);
+    border-radius: 10px;
+    box-shadow: 3px 5px 5px grey;
+    outline-style: none;
 }
 
 button:active {
-    background-color: rgb(188, 168, 228)
+    background-color: rgb(188, 168, 228);
+    box-shadow: none;
 }
 
