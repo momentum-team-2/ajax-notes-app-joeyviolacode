@@ -82,11 +82,10 @@ function initializeSearch() {
 
 function handleSearch() {
     let searchBar = document.getElementById("search-input")
-    console.log("You have entered: " + searchBar.value)
     if (searchBar.value.length === 0) {
         populateThumbs(notes)
     } else {
-        let filteredArray = notes.filter( note => note.body.toLowerCase().match(searchBar.value.toLowerCase()) != null || note.tags.includes(searchBar.value))
+        let filteredArray = notes.filter( note => note.body.toLowerCase().match(searchBar.value.toLowerCase()) != null || note.tags.includes(searchBar.value) || note.title.toLowerCase().match(searchBar.value.toLowerCase()) != null)
         populateThumbs(filteredArray)
     }
 }
@@ -105,11 +104,12 @@ function refreshLocalDB() {
         })
 }
 
+
 function refreshLocalDBCurr() {
     fetch(serverURL)
         .then(res => res.json())
         .then( function(data) {
-            let arr = data.reverse()
+            let arr = data
             addToLocal(arr)
             populateThumbs(notes)
             currentID = arr[0].id
@@ -140,6 +140,13 @@ function addToLocal(arrOfNotes) {
             notes.push(noteFromRes(note))
         }
     }
+    notes = mostRecentFirst(notes)
+}
+
+//****************  This one needs help! */
+function mostRecentFirst(arrayOfNotes) {
+    let recentArray = [...arrayOfNotes].sort( (a, b) => new Date(b.modified) - new Date(a.modified))
+    return recentArray
 }
 
 function selectNote(e) {
