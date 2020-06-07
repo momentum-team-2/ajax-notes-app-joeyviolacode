@@ -1,4 +1,3 @@
-//TODO:  Complete display...hook up all wires to add/remove from DB on buttons, select. 
 //NEXT:  Add search bar.
 //FUTURE: Add tags?  Colors?
 //noncritical error on tags.join in select note function---tags aren't staying an array
@@ -11,15 +10,16 @@ let notes = []
 let currentNote = null
 
 refreshLocalDB()
-initializeButtons()
+initializeUI()
 
 
 //This set of functions initializes all of the buttons with event listeners and the functions they
 //call to do their jobs
-function initializeButtons() {
+function initializeUI() {
     initializeNew()
     initializeSave()
     initializeDelete()
+    initializeSearch()
 }
 
 function initializeNew() {
@@ -60,7 +60,7 @@ function initializeSave() {
 function  saveNote() {
     let title = document.getElementById("title-input").value
     let body = document.getElementById("body-input").value
-    let tags = document.getElementById("tags-input").value
+    let tags = document.getElementById("tags-input").value.split(" ")
     if (currentID === null) {
         let note = new Note(title, body, tags)
         note.addToDB()
@@ -75,6 +75,22 @@ function  saveNote() {
     }
 }
 
+function initializeSearch() {
+    let searchBar = document.getElementById("search-input")
+    searchBar.addEventListener("input", handleSearch)
+}
+
+function handleSearch() {
+    let searchBar = document.getElementById("search-input")
+    console.log("You have entered: " + searchBar.value)
+    if (searchBar.value.length === 0) {
+        populateThumbs(notes)
+    } else {
+        let filteredArray = notes.filter( note => note.body.toLowerCase().match(searchBar.value.toLowerCase()) != null || note.tags.includes(searchBar.value))
+        populateThumbs(filteredArray)
+    }
+}
+
 
 
 
@@ -85,7 +101,7 @@ function refreshLocalDB() {
         .then(res => res.json())
         .then( function(data) {
             addToLocal(data.reverse())
-            populateThumbs()
+            populateThumbs(notes)
         })
 }
 
@@ -95,18 +111,18 @@ function refreshLocalDBCurr() {
         .then( function(data) {
             let arr = data.reverse()
             addToLocal(arr)
-            populateThumbs()
+            populateThumbs(notes)
             currentID = arr[0].id
         })
 }
 
-function populateThumbs() {  
+function populateThumbs(arrOfNotes) {  
     let thumbTemplate = document.getElementById("thumbnail-template").innerHTML
     let thumbGenerator = _.template(thumbTemplate)
     let thumbTarget = document.querySelector("#selector-display")
     thumbTarget.innerHTML = ""
     
-    for (let note of notes) {
+    for (let note of arrOfNotes) {
         let thumbHTML = thumbGenerator(note.thisThumbNote())
         thumbTarget.innerHTML += thumbHTML
     }
@@ -132,7 +148,7 @@ function selectNote(e) {
     n = getNoteByID(Number(currentID))
     document.getElementById("title-input").value = n.title
     document.getElementById("body-input").value = n.body
-    document.getElementById("tags-input").value = n.tags
+    document.getElementById("tags-input").value = n.tags.join(" ")
 }
 
 
