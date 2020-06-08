@@ -73,7 +73,7 @@ header {
 }
 
 .thumbnail:active {
-    background-color: rgb(179, 190, 136);
+    background-color: #b5c2a6;
     box-shadow: none;
 }
 
@@ -161,7 +161,7 @@ label {
 
 #body-input {
     margin-top: 5px;
-    height: 90%;
+    height: 94%;
     resize: none;
 }
 

@@ -37,6 +37,7 @@ function clearNote() {
         document.getElementById("body-input").value = ""
         document.getElementById("tags-input").value = ""
         document.getElementById("search-input").value = ""
+        handleSearch()
 }
 
 function initializeDelete() {
