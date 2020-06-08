@@ -1,7 +1,9 @@
 //FUTURE:   Add ability to pin note to top of notes list.   
-//          Add selectable background-colors for notes
+//          MAYBE Add selectable background-colors for notes
 //          Make search more robust so it doesn't only search contiguous strings but looks to match words
-//          Do more CSS to make things look a little less flat...change background color and give some depth to elements/buttons
+//          SOME WORK DONE HERE Do more CSS to make things look a little less flat...change background color and give some depth to elements/buttons
+//          Remove stock delete confirmation and build something into page for that.
+//          Add tags panel so clicking on a tag listed only items with matching tag
 
 
 const serverURL = "http://localhost:3000/notes"
@@ -28,9 +30,9 @@ function initializeNew() {
     button.addEventListener("click", clearNote)
 }
 
+//Clears the current note from the display fields and flushes the search string
 function clearNote() {
     currentID = null;
-        console.log("you clicked")
         document.getElementById("title-input").value = ""
         document.getElementById("body-input").value = ""
         document.getElementById("tags-input").value = ""
@@ -42,6 +44,7 @@ function initializeDelete() {
     button.addEventListener("click", deleteNote)
 }
 
+//Deletes a note and clears all fields before refresing the local DB
 function deleteNote() {
     if (currentID) {
         let conf = confirm("Are you sure you want to delete this note?  This is permanent.")
@@ -59,6 +62,7 @@ function initializeSave() {
     button.addEventListener("click", saveNote)
 }
 
+//saves a note, either in a new spot in the DB or by updating an old post
 function  saveNote() {
     let title = document.getElementById("title-input").value
     let body = document.getElementById("body-input").value
@@ -83,6 +87,7 @@ function initializeSearch() {
     searchBar.addEventListener("input", handleSearch)
 }
 
+//Updates the list of notes in real time based on the contents of the search field
 function handleSearch() {
     let searchBar = document.getElementById("search-input")
     if (searchBar.value.length === 0) {
@@ -98,6 +103,9 @@ function handleSearch() {
 
 
 //Below are functions for handling the local database
+
+
+//This function is called to refresh the local DB when an already existing note is saved.
 function refreshLocalDB() {
     fetch(serverURL)
         .then(res => res.json())
@@ -107,7 +115,8 @@ function refreshLocalDB() {
         })
 }
 
-
+//This functions is called to refresh the local DB when a new note is saved.  It is necessary in this case
+//to set the currentID to that matching the new note so further operations may be performed on it
 function refreshLocalDBCurr() {
     fetch(serverURL)
         .then(res => res.json())
@@ -119,6 +128,7 @@ function refreshLocalDBCurr() {
         })
 }
 
+//This function adds all of the thumbnails to the list of notes and attaches their event listeners
 function populateThumbs(arrOfNotes) {  
     let thumbTemplate = document.getElementById("thumbnail-template").innerHTML
     let thumbGenerator = _.template(thumbTemplate)
@@ -136,6 +146,8 @@ function populateThumbs(arrOfNotes) {
     }
 }
 
+//populates the local DB given a JSON array, then asks that the new list be sorted from present
+//to past according to when a note is last modified
 function addToLocal(arrOfNotes) {
     notes = []
     if (arrOfNotes.length > 0) {
@@ -146,11 +158,14 @@ function addToLocal(arrOfNotes) {
     notes = mostRecentFirst(notes)
 }
 
+//helper function for the above.  Copies an array, sorts it from present to past according to modification
+//date, then returns the new array
 function mostRecentFirst(arrayOfNotes) {
     let recentArray = [...arrayOfNotes].sort( (a, b) => new Date(b.modified) - new Date(a.modified))
     return recentArray
 }
 
+//Figures out which note is needed, adds its data to the display fields, and stores the currentID for further operations
 function selectNote(e) {
     console.log(e.target.id)
     currentID = e.target.closest(".thumbnail").id
@@ -162,7 +177,10 @@ function selectNote(e) {
 
 
 
+
+
 //Below is the Note object and functions used for finding Notes and converting server feedback into Notes.
+//Also included are functions to ask notes to add, delete, or update themselves on the server.
 function Note(title = "", body = "", tags = [], modified = new Date(), created = new Date(), id = null) {
     this.id = id
     this.title = title

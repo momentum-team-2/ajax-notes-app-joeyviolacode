@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: white; /* rgb(43, 39, 39);*/
+    background-color: #f8fcda; /* rgb(43, 39, 39);*/
     color: white;
     height: 100vh;
     width: 100vw;
@@ -19,9 +19,9 @@ header {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    border: 1px solid white;
+    border: 1px solid black;
     font-size: 30px;
-    background-color: rgb(107, 204, 88)
+    background-color: #7b7263
 }
 
 #body-container {
@@ -31,40 +31,42 @@ header {
 }
 
 #editor-container {
-    width: 70%;
+    width: 68%;
     height: 100%;
 }
 
 #selector-container {
-    width: 30%;
-    border-right: 1px solid white;
+    width: 32%;
+    border-right: 1px solid black;
 }
 
 #search-bar {
     height: 10%;
-    background-color: rgb(229, 240, 191);
+    background-color: #d7e6c7;
     color: black;
     border-radius: 10px;
     margin: 10px 5px;
     padding: 10px;
     border: 1px solid black;
     box-shadow: 3px 5px 5px grey;
-    background-color: rgb(245, 240, 255)
+    background-color: #c7a27C;
+}
 
+#search-input {
+    background-color: #c7a27C;
 }
 
 #selector-display {
     height: 88%;
     overflow-y: auto;
-    border-top: 1px solid white;
-
+    border-top: 1px solid black;
 }
 
 .thumbnail {
-    background-color: rgb(229, 240, 191);
+    background-color: #d7e6c7;
     color: black;
     border-radius: 10px;
-    margin: 10px 5px;
+    margin: 10px 10px;
     padding: 10px;
     border: 1px solid black;
     box-shadow: 3px 5px 5px grey;
@@ -103,8 +105,7 @@ header {
 }
 
 .display {
-    border: 1px solid white;
-    background-color: rgb(229, 240, 191);
+    background-color: #d7e6c7;
     height: 80%;
     width: 40%;
     margin: auto;
@@ -122,9 +123,13 @@ header {
 input, textarea {
     font-family: 'Merriweather', serif;
     border: none;
-    background-color: rgb(229, 240, 191);
+    background-color: #d7e6c7;
     width: 100%;
     outline: none;
+}
+
+textarea {
+    line-height: 20px;
 }
 
 
@@ -136,11 +141,16 @@ label {
 .title-editor {
     height: 10%;
     border-bottom: 1px solid black;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
+    padding-top: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
 }
 
 #title-input {
-    height: 50%;
+    height: 65%;
+    font-size: 18px;
 }
 
 .body-editor {
@@ -169,14 +179,14 @@ button {
     margin: 0 20px;
     font-family: 'Merriweather', serif;
     font-size: 20px;
-    background-color: rgb(183, 174, 199);
+    background-color:#93ACB5;
     border-radius: 10px;
     box-shadow: 3px 5px 5px grey;
     outline-style: none;
 }
 
 button:active {
-    background-color: rgb(188, 168, 228);
+    background-color: rgb(114, 134, 141);
     box-shadow: none;
 }
 
