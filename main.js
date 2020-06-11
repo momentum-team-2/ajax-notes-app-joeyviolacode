@@ -32,8 +32,8 @@ function initializeNew() {
 
 //Clears the current note from the display fields and flushes the search string
 function clearNote() {
-    if (currentID != null) {
-        document.getElementById(currentID).classList.remove("active")
+    if (document.getElementById(currentID)) {
+        let element = document.getElementById(currentID).classList.remove("active")
     }
     currentID = null;
     document.getElementById("title-input").value = ""
@@ -84,7 +84,7 @@ function  saveNote(e) {
         note.updateNote()
         refreshLocalDB()
     }
-    setTimeout(setActive, 50)
+    setTimeout(setActive, 100)
     document.getElementById("selector-display").scrollTo(0, 0)
 }
 
@@ -107,6 +107,9 @@ function handleSearch() {
     } else {
         let filteredArray = notes.filter( note => note.body.toLowerCase().match(searchBar.value.toLowerCase()) != null || note.tags.includes(searchBar.value) || note.title.toLowerCase().match(searchBar.value.toLowerCase()) != null)
         populateThumbs(filteredArray)
+    }
+    if (document.getElementById(currentID)) {
+        setActive()
     }
 }
 
@@ -175,7 +178,7 @@ function mostRecentFirst(arrayOfNotes) {
 
 //Figures out which note is needed, adds its data to the display fields, and stores the currentID for further operations
 function selectNote(e) {
-    if (currentID != null) {
+    if (document.getElementById(currentID)) {
         document.getElementById(currentID).classList.remove("active")
     }
     console.log(e.target.id)
