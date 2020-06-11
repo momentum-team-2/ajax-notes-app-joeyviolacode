@@ -32,12 +32,15 @@ function initializeNew() {
 
 //Clears the current note from the display fields and flushes the search string
 function clearNote() {
+    if (currentID != null) {
+        document.getElementById(currentID).classList.remove("active")
+    }
     currentID = null;
-        document.getElementById("title-input").value = ""
-        document.getElementById("body-input").value = ""
-        document.getElementById("tags-input").value = ""
-        document.getElementById("search-input").value = ""
-        handleSearch()
+    document.getElementById("title-input").value = ""
+    document.getElementById("body-input").value = ""
+    document.getElementById("tags-input").value = ""
+    document.getElementById("search-input").value = ""
+    handleSearch()
 }
 
 function initializeDelete() {
@@ -64,7 +67,7 @@ function initializeSave() {
 }
 
 //saves a note, either in a new spot in the DB or by updating an old post
-function  saveNote() {
+function  saveNote(e) {
     let title = document.getElementById("title-input").value
     let body = document.getElementById("body-input").value
     let tags = document.getElementById("tags-input").value.split(" ")
@@ -81,7 +84,14 @@ function  saveNote() {
         note.updateNote()
         refreshLocalDB()
     }
+    setTimeout(setActive, 50)
 }
+
+function setActive() {
+    console.log("!!!!!!!!!")
+    document.getElementById(currentID).classList.add("active")
+}
+
 
 function initializeSearch() {
     let searchBar = document.getElementById("search-input")
@@ -168,15 +178,18 @@ function mostRecentFirst(arrayOfNotes) {
 
 //Figures out which note is needed, adds its data to the display fields, and stores the currentID for further operations
 function selectNote(e) {
+    if (currentID != null) {
+        console.log("Add is running")
+        document.getElementById(currentID).classList.remove("active")
+    }
     console.log(e.target.id)
     currentID = e.target.closest(".thumbnail").id
+    document.getElementById(currentID).classList.add("active")
     n = getNoteByID(Number(currentID))
     document.getElementById("title-input").value = n.title
     document.getElementById("body-input").value = n.body
     document.getElementById("tags-input").value = n.tags.join(" ")
 }
-
-
 
 
 
