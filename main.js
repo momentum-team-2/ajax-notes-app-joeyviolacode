@@ -4,7 +4,7 @@
 //          SOME WORK DONE HERE Do more CSS to make things look a little less flat...change background color and give some depth to elements/buttons
 //          DONE...test more fully, maybe add more feedback:  Remove stock delete confirmation and build something into page for that.
 //          Add tags panel so clicking on a tag listed only items with matching tag
-//          Add confirmation to move to new note before saving changes to old one.
+//          Add confirmation to move to new note b
 
 
 const serverURL = "http://localhost:3000/notes"
@@ -88,7 +88,7 @@ function  saveNote(e) {
         note.updateNote()
         refreshLocalDB()
     }
-    setTimeout(setActive, 100)
+    setTimeout(setActive, 200)
     document.getElementById("selector-display").scrollTo(0, 0)
     clearNote()
 }
@@ -109,11 +109,11 @@ function handleSearch() {
         populateThumbs(filteredArray)
     }
     if (document.getElementById(currentID)) {
-        setActive()
+        document.getElementById(currentID).classList.add("active")
     }
 }
 
-//helper functions for the event functions used to change CSS for visual effects
+
 function setActive() {
     document.getElementById(currentID).classList.add("active")
 }
