@@ -2,15 +2,16 @@
 //          MAYBE Add selectable background-colors for notes
 //          Make search more robust so it doesn't only search contiguous strings but looks to match words
 //          SOME WORK DONE HERE Do more CSS to make things look a little less flat...change background color and give some depth to elements/buttons
-//          Remove stock delete confirmation and build something into page for that.
+//          DONE...test more fully, maybe add more feedback:  Remove stock delete confirmation and build something into page for that.
 //          Add tags panel so clicking on a tag listed only items with matching tag
+//          Add confirmation to move to new note before saving changes to old one.
 
 
 const serverURL = "http://localhost:3000/notes"
 const PREVIEW_LENGTH = 90
 let currentID = null
 let notes = []
-let currentNote = null
+let deleteClicks = 0
 
 refreshLocalDB()
 initializeUI()
@@ -40,6 +41,7 @@ function clearNote() {
     document.getElementById("body-input").value = ""
     document.getElementById("tags-input").value = ""
     document.getElementById("search-input").value = ""
+    clearDelete()
     handleSearch()
 }
 
@@ -50,14 +52,16 @@ function initializeDelete() {
 
 //Deletes a note and clears all fields before refresing the local DB
 function deleteNote() {
-    if (currentID) {
-        let conf = confirm("Are you sure you want to delete this note?  This is permanent.")
-        if (conf) {
-            let n = getNoteByID(Number(currentID))
-            n.removeFromDB()
-            clearNote()
-            refreshLocalDB()
-        }
+    if (currentID && deleteClicks === 0) {
+        let deleteButton = document.getElementById("delete-button")
+        deleteButton.classList.add("delete-check")
+        deleteButton.innerText = "Are you sure?"
+        deleteClicks = 1;
+    } else if (currentID && deleteClicks === 1) {
+        let n = getNoteByID(Number(currentID))
+        n.removeFromDB()
+        clearNote()
+        refreshLocalDB()
     }
 }
 
@@ -86,13 +90,8 @@ function  saveNote(e) {
     }
     setTimeout(setActive, 100)
     document.getElementById("selector-display").scrollTo(0, 0)
+    clearNote()
 }
-
-function setActive() {
-    console.log("!!!!!!!!!")
-    document.getElementById(currentID).classList.add("active")
-}
-
 
 function initializeSearch() {
     let searchBar = document.getElementById("search-input")
@@ -101,6 +100,7 @@ function initializeSearch() {
 
 //Updates the list of notes in real time based on the contents of the search field
 function handleSearch() {
+    clearDelete()
     let searchBar = document.getElementById("search-input")
     if (searchBar.value.length === 0) {
         populateThumbs(notes)
@@ -112,6 +112,23 @@ function handleSearch() {
         setActive()
     }
 }
+
+//helper functions for the event functions used to change CSS for visual effects
+function setActive() {
+    document.getElementById(currentID).classList.add("active")
+}
+
+function setInactive() {
+    document.getElementById(currentID).classList.remove("active")
+}
+
+function  clearDelete() {
+    let deleteButton = document.getElementById("delete-button")
+    deleteButton.classList.remove("delete-check")
+    deleteButton.innerText = "Delete"
+    deleteClicks = 0
+}
+
 
 
 //Below are functions for handling the local database
@@ -181,13 +198,15 @@ function selectNote(e) {
     if (document.getElementById(currentID)) {
         document.getElementById(currentID).classList.remove("active")
     }
-    console.log(e.target.id)
+    //console.log(e.target.id)
     currentID = e.target.closest(".thumbnail").id
     document.getElementById(currentID).classList.add("active")
     n = getNoteByID(Number(currentID))
     document.getElementById("title-input").value = n.title
     document.getElementById("body-input").value = n.body
     document.getElementById("tags-input").value = n.tags.join(" ")
+
+    clearDelete()
 }
 
 
@@ -259,3 +278,25 @@ function noteFromRes(values) {
     return new Note(values.title, values.body, values.tags, values.modified, values.created, values.id)
 }
 
+
+
+
+
+
+
+
+
+
+/*  OLD delete function in case new one gets feisty!  Delete after further testing.
+function deleteNote() {
+    if (currentID) {
+        let conf = confirm("Are you sure you want to delete this note?  This is permanent.")
+        if (conf) {
+            let n = getNoteByID(Number(currentID))
+            n.removeFromDB()
+            clearNote()
+            refreshLocalDB()
+        }
+    }
+}
+*/

@@ -201,3 +201,7 @@ button:active {
     box-shadow: none;
 }
 
+.delete-check {
+    background-color: red;
+}
+
