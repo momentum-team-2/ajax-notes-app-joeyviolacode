@@ -21,7 +21,8 @@ header {
     justify-content: space-around;
     border: 1px solid black;
     font-size: 30px;
-    background-color: #7b7263
+    background-color: #7b7263;
+    letter-spacing: .15em;
 }
 
 #body-container {

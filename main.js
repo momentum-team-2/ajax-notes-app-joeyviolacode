@@ -85,6 +85,7 @@ function  saveNote(e) {
         refreshLocalDB()
     }
     setTimeout(setActive, 50)
+    document.getElementById("selector-display").scrollTo(0, 0)
 }
 
 function setActive() {
@@ -110,11 +111,7 @@ function handleSearch() {
 }
 
 
-
-
-
 //Below are functions for handling the local database
-
 
 //This function is called to refresh the local DB when an already existing note is saved.
 function refreshLocalDB() {
@@ -179,7 +176,6 @@ function mostRecentFirst(arrayOfNotes) {
 //Figures out which note is needed, adds its data to the display fields, and stores the currentID for further operations
 function selectNote(e) {
     if (currentID != null) {
-        console.log("Add is running")
         document.getElementById(currentID).classList.remove("active")
     }
     console.log(e.target.id)
